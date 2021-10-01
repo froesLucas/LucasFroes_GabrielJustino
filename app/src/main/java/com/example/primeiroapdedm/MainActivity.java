@@ -49,42 +49,19 @@ public class MainActivity extends AppCompatActivity {
             nota2=txtNota2.getText().toString();
             media=(Double.valueOf(nota1)*Double.valueOf(nota2))/2;
             mediaf=media.toString();
-            //Colocando em objeto aluno
-            Aluno a = new Aluno(nome,nota1,nota2,mediaf);
             //Intent
            Intent i = new Intent(getApplicationContext(),ExibeActivity.class);
            //colocar dados
-            i.putExtra("Aluno",a);
+            i.putExtra("nome:", nome);
+            i.putExtra("nota1",nota1);
+            i.putExtra("nota2",nota2);
+            i.putExtra("media",mediaf);
             //iniciar a activity
             startActivity(i);
         }
 
     }
     //Objeto Aluno
-    public class Aluno implements Serializable{
-        private String nome,nota1, nota2,mediaf;
 
-        public Aluno(String nome,String nota1,String nota2,String mediaf){
-            this.nome=nome;
-            this.nota1=nota1;
-            this.nota2=nota2;
-            this.mediaf=mediaf;
-        }
-        public String getNome(){
-            return nome;
-        }
-
-        public String getMediaf() {
-            return mediaf;
-        }
-
-        public String getNota1() {
-            return nota1;
-        }
-
-        public String getNota2() {
-            return nota2;
-        }
-    }
 
 }

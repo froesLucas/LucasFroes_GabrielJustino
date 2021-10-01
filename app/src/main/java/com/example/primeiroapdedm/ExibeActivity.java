@@ -15,7 +15,9 @@ import java.util.Arrays;
 public class ExibeActivity extends AppCompatActivity {
     private  Button btnInserir;
     private ListView lista;
-    private ArrayList<String> informacoes= new ArrayList<>();
+    ArrayList<Alunos> informacoes= new ArrayList<Alunos>();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +28,12 @@ public class ExibeActivity extends AppCompatActivity {
         //ligando lista
         lista=findViewById(R.id.lista);
         //Exibir Lista
+        Intent i = getIntent();
+        Alunos a=new Alunos(i.getStringExtra("nome"),i.getStringExtra("nota1"),i.getStringExtra("nota2"),i.getStringExtra("media"));
+        informacoes.add(a);
+        //Aplicar no adapter
+        ArrayAdapter<Alunos> adapter =new ArrayAdapter<Alunos>(ExibeActivity.this, android.R.layout.simple_list_item_1,informacoes);
+        lista.setAdapter(adapter);
 
     }
     private class EscutadorBotaoInserir implements View.OnClickListener{
