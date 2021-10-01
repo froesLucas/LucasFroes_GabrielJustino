@@ -6,62 +6,81 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ExibeActivity extends AppCompatActivity {
-    private  Button btnInserir;
-    private ListView lista;
-    ArrayList<Alunos> informacoes= new ArrayList<Alunos>();
 
+    EditText txtNome;
+    EditText txtNota1;
+    EditText txtNota2;
+    TextView lblMedia;
+    Button btnOk;
+    Button btnCancela;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_exibe);
-        //ligando botao
-        btnInserir=(Button) findViewById(R.id.btnInserir);
-        btnInserir.setOnClickListener( new EscutadorBotaoInserir());
-        //ligando lista
-        lista=findViewById(R.id.lista);
-        //Exibir Lista
-        Intent i = getIntent();
-        Alunos a=new Alunos(i.getStringExtra("nome"),i.getStringExtra("nota1"),i.getStringExtra("nota2"),i.getStringExtra("media"));
-        informacoes.add(a);
-        //Aplicar no adapter
-        ArrayAdapter<Alunos> adapter =new ArrayAdapter<Alunos>(ExibeActivity.this, android.R.layout.simple_list_item_1,informacoes);
-        lista.setAdapter(adapter);
-        //clicks
-        lista.setOnItemClickListener(new EscutadorComum());
-        lista.setLongClickable(true);
-        //lista.setOnItemLongClickListener(new EscutadorCliqueLongo());
+        setContentView(R.layout.activity_main);
+
+        txtNome = findViewById(R.id.txtNome);
+        txtNota1 = findViewById(R.id.txtNota1);
+        txtNota2 = findViewById(R.id.txtNota2);
+
+        lblMedia = findViewById(R.id.lblMedia);
+        btnOk = (Button) findViewById(R.id.btnOk);
+        btnCancela = (Button) findViewById(R.id.btnVolta);
+
+        btnOk.setOnClickListener( new AddAluno() );
+        btnCancela.setOnClickListener( new Cancela() );
+
 
     }
-    private class EscutadorComum implements AdapterView.OnItemClickListener{
+    private class AddAluno implements View.OnClickListener{
+
         @Override
-        public void onItemClick(AdapterView<?> adapterView,View view,int i,long l){
-            Toast.makeText(ExibeActivity.this,informacoes.get(i).toString(),Toast.LENGTH_SHORT).show();
-        }
-    }
-    private class EscutadorCliqueLongo implements AdapterView.OnItemLongClickListener{
-        @Override
-        public boolean onItemLongClick(AdapterView<?> adapterView,View view,int i,long l){
-            informacoes.indexOf(i);
-            Toast.makeText(ExibeActivity.this,"Excluido",Toast.LENGTH_SHORT).show();
-            return true;
+        public void onClick(View view) {
+            String nome, nota1, nota2, mediaM;
+            Double n1, n2, media;
+
+            nome = txtNome.getText().toString();
+            nota1 = txtNota1.getText().toString();
+            nota2 = txtNota2.getText().toString();
+
+            n1 = Double.parseDouble( txtNota1.getText().toString() );
+            n2 = Double.parseDouble( txtNota2.getText().toString() );
+
+            media = (n1+n2)/2;
+            mediaM = String.valueOf(media);
+
+            Intent i = new Intent();
+
+            i.putExtra("nome", nome);
+            i.putExtra("nota1", nota1);
+            i.putExtra("nota2", nota2);
+            i.putExtra("media", mediaM);
+
+            setResult(RESULT_OK,i);
+
+            txtNome.setText("");
+            txtNota1.setText("");
+            txtNota2.setText("");
+
+            finish();
         }
     }
 
-    private class EscutadorBotaoInserir implements View.OnClickListener{
+    private class Cancela implements View.OnClickListener{
+
         @Override
-        public void onClick(View view){
-            Intent i= new Intent( getApplicationContext(), MainActivity.class);
-            startActivity(i);
+        public void onClick(View view) {
+            onBackPressed();
         }
     }
 }
